@@ -40,6 +40,14 @@ export default function Home() {
     const url = URL.createObjectURL(blob);
     setChaosifiedImage(url);
   };
+
+  const handleDownload = async () => {
+    if (!chaosifiedImage) return;
+    const link = document.createElement("a");
+    link.href = chaosifiedImage;
+    link.download = "chaosified.jpg";
+    link.click();
+  };
   return (
     <div className="flex flex-col w-screen h-screen items-center justify-center">
       <p className="text-4xl font-bold">CHAOSIFY</p>
@@ -71,6 +79,12 @@ export default function Home() {
           )}
         </div>
       </div>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleUpload}
+        className="m-3 border-3 bg-gray-200 rounded-xl p-3 cursor-pointer border-red-600"
+      />
       {!image && !chaosifiedImage && (
         <button
           disabled={true}
@@ -90,17 +104,14 @@ export default function Home() {
         </button>
       )}
       {chaosifiedImage && (
-        <button className="border-1 border-black rounded-2xl p-2 cursor-pointer">
+        <button
+          onClick={handleDownload}
+          className="border-1 border-black rounded-2xl p-2 cursor-pointer"
+        >
           {" "}
           DOWNLOAD{" "}
         </button>
       )}
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleUpload}
-        className="border-3 bg-gray-200 rounded-xl p-3 cursor-pointer border-red-600"
-      />
     </div>
   );
 }
