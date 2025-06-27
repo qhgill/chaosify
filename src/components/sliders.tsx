@@ -30,7 +30,7 @@ const Sliders = ({
   setQuality,
 }: SlidersProps) => {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4">
+    <div className="my-8 flex w-full flex-col items-center justify-center gap-5">
       <LabelledSlider
         label="Grain"
         minimum={0}

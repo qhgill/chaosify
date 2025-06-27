@@ -22,9 +22,8 @@ const LabelledSlider = ({
 }: SliderProps) => {
   return (
     <div className="flex w-full flex-col items-center">
-      <p className="text-2xl">
-        {" "}
-        {label}: {value}{" "}
+      <p className="mb-2 text-xl">
+        {label}: {value}
       </p>
       <div className="grid w-full grid-cols-6 items-center justify-center">
         <p className="text-center">{minimum}</p>
@@ -33,7 +32,7 @@ const LabelledSlider = ({
           min={minimum}
           max={maximum}
           step={step}
-          className="col-span-4"
+          className="col-span-4 cursor-pointer"
           onValueChange={(val) => setValue(val)}
         />
         <p className="text-center">{maximum}</p>

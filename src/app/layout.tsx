@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${rubikGlitch.variable} ${rubik.variable} max-w-screen antialiased`}
+        className={`${rubikGlitch.variable} ${rubik.variable} min-h-screen max-w-screen overflow-hidden bg-black text-white antialiased`}
       >
         {children}
         <Footer />
