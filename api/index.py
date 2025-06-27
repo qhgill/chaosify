@@ -21,20 +21,29 @@ def uploadimg():
 def chaosify():
     if 'image' not in request.files:
         return {'error': 'No image file provided'}, 400
+    
+    contrast = float(request.args.get("contrast", 2.0))
+    sharpness = float(request.args.get("sharpness", 0.1))
+    brightness = float(request.args.get("brightness", 0.5))
+    saturation = float(request.args.get("saturation", 0.9))
+    quality = int(request.args.get("quality", 8))
+    noise_val = float(request.args.get("noise", 100))
+
     image_file = request.files['image']
     image = Image.open(image_file.stream).convert("RGB")
     numpy_image = numpy.array(image)
-    noise = numpy.random.normal(0, 80, numpy_image.shape).astype(numpy.int16)
+    noise = numpy.random.normal(0, noise_val, numpy_image.shape).astype(numpy.int16)
     chaosified_image = numpy.clip(numpy_image + noise, 0, 255).astype(numpy.uint8)
     image = Image.fromarray(chaosified_image)
-    image = ImageEnhance.Color(image).enhance(0.6)
-    image = ImageEnhance.Sharpness(image).enhance(0.1)
-    image = ImageEnhance.Contrast(image).enhance(1.2)
-    image = ImageEnhance.Brightness(image).enhance(0.7)
-    image = ImageEnhance.Contrast(image).enhance(1.9)
+    image = ImageEnhance.Contrast(image).enhance(contrast)
+    image = ImageEnhance.Sharpness(image).enhance(sharpness)
+    
+    image = ImageEnhance.Brightness(image).enhance(brightness)
+    image = ImageEnhance.Color(image).enhance(saturation)
+    image = ImageEnhance.Contrast(image).enhance(contrast)
     
     img_io = BytesIO()
-    image.save(img_io, 'JPEG', quality=8)
+    image.save(img_io, 'JPEG', quality=quality)
     img_io.seek(0)
     return send_file(img_io, mimetype='image/jpeg')
 
