@@ -26,17 +26,17 @@ const LabelledSlider = ({
         {" "}
         {label}: {value}{" "}
       </p>
-      <div className="flex w-full flex-row justify-center gap-x-3">
-        <p>{minimum}</p>
+      <div className="grid w-full grid-cols-6 items-center justify-center">
+        <p className="text-center">{minimum}</p>
         <Slider
           defaultValue={[defaultVal]}
           min={minimum}
           max={maximum}
           step={step}
-          className="w-1/2"
+          className="col-span-4"
           onValueChange={(val) => setValue(val)}
         />
-        <p>{maximum}</p>
+        <p className="text-center">{maximum}</p>
       </div>
     </div>
   );

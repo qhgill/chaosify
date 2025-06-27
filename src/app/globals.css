@@ -1,6 +1,7 @@
+@import url("https://fonts.googleapis.com/css?family=Rubik_Glitch");
+@import url("https://fonts.googleapis.com/css?family=Rubik");
 @import "tailwindcss";
 @import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -41,6 +42,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --font-title: "Rubik Glitch", system-ui;
+  --font-body: "Rubik", sans-serif;
 }
 
 :root {
@@ -117,6 +121,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }

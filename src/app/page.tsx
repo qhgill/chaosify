@@ -58,80 +58,77 @@ export default function Home() {
     link.click();
   };
   return (
-    <div className="flex w-screen flex-col items-center justify-center">
-      <p className="text-4xl font-bold">CHAOSIFY</p>
-      <div className="flex w-full flex-row items-center justify-center">
-        <div className="m-10 size-170 rounded-xl border-2 border-black p-10">
+    <div className="flex w-full flex-col items-center justify-center">
+      <p className="font-title my-10 text-8xl">CHAOSIFY</p>
+      <div className="flex w-10/12 flex-row items-center justify-center">
+        <div className="flex w-1/2 flex-col items-center">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleUpload}
+            className="m-3 cursor-pointer rounded-xl border-3 border-black bg-gray-200 p-3"
+          />
           {image && (
-            <div className="flex items-center justify-center">
-              <Image
-                src={image}
-                alt="image"
-                className="size-150 rounded-xl object-contain"
-                width={300}
-                height={300}
-              />
-            </div>
+            <Sliders
+              grain={grain}
+              setGrain={setGrain}
+              brightness={brightness}
+              setBrightness={setBrightness}
+              sharpness={sharpness}
+              setSharpness={setSharpness}
+              contrast={contrast}
+              setContrast={setContrast}
+              saturation={saturation}
+              setSaturation={setSaturation}
+              quality={quality}
+              setQuality={setQuality}
+            />
+          )}
+
+          {image && !chaosifiedImage && (
+            <button
+              onClick={handleChaosify}
+              className="cursor-pointer rounded-2xl border-1 border-black p-2"
+            >
+              CHAOSIFY
+            </button>
+          )}
+          {chaosifiedImage && (
+            <button
+              onClick={handleDownload}
+              className="cursor-pointer rounded-2xl border-1 border-black p-2"
+            >
+              DOWNLOAD
+            </button>
           )}
         </div>
-        <div className="m-10 size-170 rounded-xl border-2 border-black p-10">
-          {chaosifiedImage && (
-            <div className="flex items-center justify-center">
-              <Image
-                src={chaosifiedImage}
-                alt="chaosified image"
-                className="size-150 rounded-xl object-contain"
-                width={300}
-                height={300}
-              />
+
+        <div className="flex size-170 items-center justify-center">
+          {!image && (
+            <div className="flex aspect-square size-150 items-center justify-center rounded-xl border-2 border-black">
+              <p>upload an image!</p>
             </div>
+          )}
+          {image && !chaosifiedImage && (
+            <Image
+              src={image}
+              alt="image"
+              className="aspect-square size-150 rounded-xl border-2 border-black object-contain"
+              width={300}
+              height={300}
+            />
+          )}
+          {chaosifiedImage && (
+            <Image
+              src={chaosifiedImage}
+              alt="chaosified image"
+              className="aspect-square size-150 rounded-xl border-2 border-black object-contain"
+              width={300}
+              height={300}
+            />
           )}
         </div>
       </div>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleUpload}
-        className="m-3 cursor-pointer rounded-xl border-3 border-red-600 bg-gray-200 p-3"
-      />
-      <Sliders
-        grain={grain}
-        setGrain={setGrain}
-        brightness={brightness}
-        setBrightness={setBrightness}
-        sharpness={sharpness}
-        setSharpness={setSharpness}
-        contrast={contrast}
-        setContrast={setContrast}
-        saturation={saturation}
-        setSaturation={setSaturation}
-        quality={quality}
-        setQuality={setQuality}
-      />
-      {!image && !chaosifiedImage && (
-        <button
-          disabled={true}
-          className="cursor-not-allowed rounded-2xl border-1 border-black p-2"
-        >
-          UPLOAD IMAGE FIRST
-        </button>
-      )}
-      {image && !chaosifiedImage && (
-        <button
-          onClick={handleChaosify}
-          className="cursor-pointer rounded-2xl border-1 border-black p-2"
-        >
-          CHAOSIFY
-        </button>
-      )}
-      {chaosifiedImage && (
-        <button
-          onClick={handleDownload}
-          className="cursor-pointer rounded-2xl border-1 border-black p-2"
-        >
-          DOWNLOAD
-        </button>
-      )}
     </div>
   );
 }
