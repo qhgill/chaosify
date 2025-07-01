@@ -14,9 +14,10 @@ export default function Home() {
   const [sharpness, setSharpness] = useState([0.1]);
   const [saturation, setSaturation] = useState([0.9]);
   const [quality, setQuality] = useState([8]);
+  const [status, setStatus] = useState<"" | "uploading" | "chaosifying">("");
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-
+    setStatus("uploading");
     const file = e.target.files[0];
     setFile(file);
     const formData = new FormData();
@@ -31,11 +32,12 @@ export default function Home() {
     const url = URL.createObjectURL(blob);
     setImage(url);
     setChaosifiedImage("");
+    setStatus("");
   };
 
   const handleChaosify = async () => {
     if (!file) return;
-
+    setStatus("chaosifying");
     const formData = new FormData();
     formData.append("image", file);
     const res = await fetch(
@@ -49,6 +51,7 @@ export default function Home() {
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     setChaosifiedImage(url);
+    setStatus("");
   };
 
   const handleDownload = async () => {
@@ -67,7 +70,7 @@ export default function Home() {
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="font-title my-10 text-8xl"
+        className="font-title my-10 text-4xl md:text-8xl"
       >
         CHAOSIFY
       </motion.div>
@@ -80,13 +83,13 @@ export default function Home() {
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="flex w-1/2 flex-col items-center"
+          className="flex w-10/12 flex-col items-center md:w-1/2"
         >
           <input
             type="file"
             accept="image/*"
             onChange={handleUpload}
-            className="m- cursor-pointer rounded-xl border-3 border-white bg-white/20 p-3 transition-colors duration-400 ease-out hover:bg-white/40"
+            className="m-3 w-full cursor-pointer rounded-xl border-3 border-white bg-white/20 p-3 transition-colors duration-400 ease-out hover:bg-white/40 md:w-auto"
           />
           {image && (
             <motion.div
@@ -158,9 +161,24 @@ export default function Home() {
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="relative flex aspect-square w-2/5 items-center justify-center rounded-xl border-3 border-white bg-white/20"
+          className="relative flex aspect-square w-10/12 items-center justify-center rounded-xl border-3 border-white bg-white/20 md:w-2/5"
         >
-          {!image && (
+          {status && (
+            <motion.div
+              transition={{
+                duration: 0.4,
+              }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="absolute z-10 flex h-full w-full items-center justify-center bg-white/20"
+            >
+              <p className="font-title text-center text-2xl text-white">
+                {status === "uploading" && "Uploading image..."}
+                {status === "chaosifying" && "Chaosifying..."}
+              </p>
+            </motion.div>
+          )}
+          {!image && !status && (
             <div className="flex aspect-square items-center justify-center rounded-xl">
               <p>Upload an Image</p>
             </div>
