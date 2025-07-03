@@ -9,7 +9,7 @@ import Compressor from "compressorjs";
 export default function Home() {
   const [image, setImage] = useState("");
   const [chaosifiedImage, setChaosifiedImage] = useState("");
-  const [file, setFile] = useState<File | Blob | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [grain, setGrain] = useState([100]);
   const [contrast, setContrast] = useState([2]);
   const [brightness, setBrightness] = useState([0.5]);
@@ -23,24 +23,35 @@ export default function Home() {
     if (!e.target.files) return;
     try {
       setStatus("uploading");
-      let file: Blob = e.target.files[0];
-
-      new Compressor(file, {
-        quality: 0.9,
-        maxWidth: 2000,
-        maxHeight: 2000,
-        success(compressedImg) {
-          file = compressedImg;
-        },
+      const originalFile = e.target.files[0];
+      const compressedFile: File = await new Promise((resolve, reject) => {
+        new Compressor(originalFile, {
+          quality: 0.9,
+          maxWidth: 2000,
+          maxHeight: 2000,
+          success(compressedImg) {
+            const newFile = new File([compressedImg], originalFile.name, {
+              type: compressedImg.type,
+            });
+            resolve(newFile);
+          },
+          error(err) {
+            reject(err);
+          },
+        });
       });
-      setFile(file);
+      setFile(compressedFile);
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", compressedFile);
 
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
+
+      if (!res.ok) {
+        throw new Error("upload failed");
+      }
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -66,6 +77,10 @@ export default function Home() {
           body: formData,
         },
       );
+
+      if (!res.ok) {
+        throw new Error("chaosify failed");
+      }
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
