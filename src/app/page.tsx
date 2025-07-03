@@ -33,6 +33,7 @@ export default function Home() {
             const newFile = new File([compressedImg], originalFile.name, {
               type: compressedImg.type,
             });
+            console.log(newFile.size);
             resolve(newFile);
           },
           error(err) {
@@ -48,6 +49,10 @@ export default function Home() {
         method: "POST",
         body: formData,
       });
+
+      if (res.status === 413) {
+        throw new Error("too big");
+      }
 
       if (!res.ok) {
         throw new Error("upload failed");
