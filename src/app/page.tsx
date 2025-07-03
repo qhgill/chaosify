@@ -3,6 +3,7 @@ import { useState } from "react";
 import Settings from "@/components/settings";
 import Title from "@/components/title";
 import ImageBox from "@/components/imagebox";
+import Footer from "@/components/footer";
 
 export default function Home() {
   const [image, setImage] = useState("");
@@ -64,7 +65,7 @@ export default function Home() {
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <Title />
-      <div className="font-body flex w-10/12 flex-col items-center justify-center md:flex-row">
+      <div className="font-body flex w-10/12 flex-col items-center justify-center lg:flex-row">
         <Settings
           image={image}
           chaosifiedImage={chaosifiedImage}
@@ -90,6 +91,7 @@ export default function Home() {
           image={image}
         />
       </div>
+      <Footer />
     </div>
   );
 }

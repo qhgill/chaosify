@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Rubik_Glitch, Rubik } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/footer";
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
@@ -30,10 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${rubikGlitch.variable} ${rubik.variable} min-h-screen max-w-screen overflow-x-hidden bg-black text-white antialiased md:overflow-hidden`}
+        className={`${rubikGlitch.variable} ${rubik.variable} min-h-screen max-w-screen overflow-x-hidden bg-black text-white antialiased`}
       >
         {children}
-        <Footer />
       </body>
     </html>
   );
