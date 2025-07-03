@@ -18,7 +18,7 @@ const ImageBox = ({ status, image, chaosifiedImage }: ImageBoxProps) => {
       initial={{ opacity: 0, x: 20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
-      className="relative flex aspect-square w-10/12 items-center justify-center rounded-xl border-3 border-white bg-white/20 md:w-2/5"
+      className="relative flex aspect-square w-full items-center justify-center rounded-xl border-3 border-white bg-white/20 lg:w-2/5"
     >
       {status && (
         <motion.div
@@ -43,7 +43,7 @@ const ImageBox = ({ status, image, chaosifiedImage }: ImageBoxProps) => {
       )}
       {!image && !status && (
         <div className="flex aspect-square items-center justify-center rounded-xl">
-          <p>Upload an Image</p>
+          <p>Your images will appear here</p>
         </div>
       )}
       {image && !chaosifiedImage && (
