@@ -33,7 +33,6 @@ export default function Home() {
             const newFile = new File([compressedImg], originalFile.name, {
               type: compressedImg.type,
             });
-            console.log(newFile.size);
             resolve(newFile);
           },
           error(err) {
