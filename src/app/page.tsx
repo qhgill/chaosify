@@ -3,6 +3,11 @@ import Image from "next/image";
 import { useState } from "react";
 import Sliders from "@/components/sliders";
 import { motion } from "motion/react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function Home() {
   const [image, setImage] = useState("");
@@ -85,12 +90,27 @@ export default function Home() {
           viewport={{ once: true }}
           className="flex w-10/12 flex-col items-center md:w-1/2"
         >
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleUpload}
-            className="m-3 w-full cursor-pointer rounded-xl border-3 border-white bg-white/20 p-3 transition-colors duration-400 ease-out hover:bg-white/40 md:w-auto"
-          />
+          <div className="flex flex-row justify-center">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleUpload}
+              className="m-3 w-full cursor-pointer rounded-xl border-3 border-white bg-white/20 p-3 transition-colors duration-400 ease-out hover:bg-white/40 md:w-auto"
+            />
+            <Popover>
+              <PopoverTrigger className="font-title m-3 aspect-square cursor-pointer rounded-xl border-3 border-white bg-white/20 px-3 text-2xl transition-colors duration-400 ease-out hover:bg-white/40">
+                ?
+              </PopoverTrigger>
+              <PopoverContent className="font-body rounded-xl border-3 border-white bg-neutral-800 text-white">
+                Click the upload image button to add an image from your device
+                to the website. adjust the settings using the sliders shown
+                after uploading your image. press &quot;chaosify&quot; and wait
+                for the website to process your image. Once processed, press
+                &quot;download&quot; to download the image onto your device.
+              </PopoverContent>
+            </Popover>
+          </div>
+
           {image && (
             <motion.div
               transition={{
