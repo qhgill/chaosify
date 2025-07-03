@@ -3,7 +3,7 @@ import Image from "next/image";
 import { VscLoading } from "react-icons/vsc";
 
 interface ImageBoxProps {
-  status: "" | "uploading" | "chaosifying";
+  status: "" | "uploading" | "chaosifying" | "uploaderror" | "chaosifyerror";
   image: string;
   chaosifiedImage: string;
 }
@@ -29,21 +29,26 @@ const ImageBox = ({ status, image, chaosifiedImage }: ImageBoxProps) => {
           whileInView={{ opacity: 1 }}
           className="absolute z-10 flex h-full w-full flex-col items-center justify-center bg-white/20"
         >
-          <motion.div
-            whileInView={{ rotate: 360 }}
-            transition={{ repeat: Infinity }}
-          >
-            <VscLoading className="text-2xl" />
-          </motion.div>
+          {(status === "chaosifying" || status === "uploading") && (
+            <motion.div
+              whileInView={{ rotate: 360 }}
+              transition={{ repeat: Infinity }}
+            >
+              <VscLoading className="text-2xl" />
+            </motion.div>
+          )}
+
           <p className="font-title text-center text-2xl text-white">
             {status === "uploading" && "Uploading image..."}
             {status === "chaosifying" && "Chaosifying..."}
+            {status === "uploaderror" && "Error uploading image"}
+            {status === "chaosifyerror" && "Error chaosifying image"}
           </p>
         </motion.div>
       )}
       {!image && !status && (
         <div className="flex aspect-square items-center justify-center rounded-xl">
-          <p>Your images will appear here</p>
+          <p>Your image will appear here</p>
         </div>
       )}
       {image && !chaosifiedImage && (

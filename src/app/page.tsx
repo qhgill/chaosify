@@ -4,55 +4,77 @@ import Settings from "@/components/settings";
 import Title from "@/components/title";
 import ImageBox from "@/components/imagebox";
 import Footer from "@/components/footer";
+import Compressor from "compressorjs";
 
 export default function Home() {
   const [image, setImage] = useState("");
   const [chaosifiedImage, setChaosifiedImage] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | Blob | null>(null);
   const [grain, setGrain] = useState([100]);
   const [contrast, setContrast] = useState([2]);
   const [brightness, setBrightness] = useState([0.5]);
   const [sharpness, setSharpness] = useState([0.1]);
   const [saturation, setSaturation] = useState([0.9]);
   const [quality, setQuality] = useState([8]);
-  const [status, setStatus] = useState<"" | "uploading" | "chaosifying">("");
+  const [status, setStatus] = useState<
+    "" | "uploading" | "chaosifying" | "uploaderror" | "chaosifyerror"
+  >("");
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    setStatus("uploading");
-    const file = e.target.files[0];
-    setFile(file);
-    const formData = new FormData();
-    formData.append("image", file);
+    try {
+      setStatus("uploading");
+      let file: Blob = e.target.files[0];
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+      new Compressor(file, {
+        quality: 0.9,
+        maxWidth: 2000,
+        maxHeight: 2000,
+        success(compressedImg) {
+          file = compressedImg;
+        },
+      });
+      setFile(file);
+      const formData = new FormData();
+      formData.append("image", file);
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    setImage(url);
-    setChaosifiedImage("");
-    setStatus("");
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      setImage(url);
+      setChaosifiedImage("");
+      setStatus("");
+    } catch (error) {
+      console.error("Uploading error: ", error);
+      setStatus("uploaderror");
+    }
   };
 
   const handleChaosify = async () => {
     if (!file) return;
-    setStatus("chaosifying");
-    const formData = new FormData();
-    formData.append("image", file);
-    const res = await fetch(
-      `/api/chaosify?contrast=${contrast}&sharpness=${sharpness}&brightness=${brightness}&saturation=${saturation}&quality=${quality}&noise=${grain}`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
+    try {
+      setStatus("chaosifying");
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(
+        `/api/chaosify?contrast=${contrast}&sharpness=${sharpness}&brightness=${brightness}&saturation=${saturation}&quality=${quality}&noise=${grain}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    setChaosifiedImage(url);
-    setStatus("");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      setChaosifiedImage(url);
+      setStatus("");
+    } catch (error) {
+      console.error("Chaosify error: ", error);
+      setStatus("chaosifyerror");
+    }
   };
 
   const handleDownload = async () => {
